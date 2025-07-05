@@ -46,6 +46,7 @@ if %errorlevel% neq 0 (
 echo Git is available. Version:
 git --version
 
+:: Check for required project files and folders
 echo.
 echo Checking for required project files and folders...
 if not exist package.json (
@@ -70,6 +71,7 @@ if not exist electron (
 )
 echo All required files and folders are present.
 
+:: Install npm dependencies
 echo.
 echo Installing project dependencies...
 npm install
@@ -79,6 +81,49 @@ if %errorlevel% neq 0 (
     pause
     exit /b 1
 )
+
+:: Check react-scripts
+echo.
+echo Checking if react-scripts is available...
+npx react-scripts --version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo ERROR: react-scripts is not installed or not working!
+    echo Try running: npm install
+    echo If the problem persists, check your package.json and node_modules.
+    pause
+    exit /b 1
+)
+echo react-scripts is available. Version:
+npx react-scripts --version
+
+:: Check electron
+echo.
+echo Checking if electron is available...
+npx electron --version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo ERROR: electron is not installed or not working!
+    echo Try running: npm install
+    echo If the problem persists, check your package.json and node_modules.
+    pause
+    exit /b 1
+)
+echo electron is available. Version:
+npx electron --version
+
+:: Check electron-builder
+echo.
+echo Checking if electron-builder is available...
+npx electron-builder --version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo ERROR: electron-builder is not installed or not working!
+    echo Try running: npm install
+    echo If the problem persists, check your package.json and node_modules.
+    pause
+    exit /b 1
+)
+echo electron-builder is available. Version:
+npx electron-builder --version
+
 echo.
 echo ========================================
 echo Installation completed successfully!

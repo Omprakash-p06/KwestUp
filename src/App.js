@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   AppBar, Toolbar, Typography, Button, Box, Tabs, Tab,
   TextField, Paper, IconButton, Dialog, DialogTitle, DialogContent,
-  DialogActions, Slide, Checkbox, FormControlLabel, Backdrop
+  DialogActions, Slide, Checkbox, FormControlLabel, Backdrop, Switch
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
 import {
   Add as AddIcon,
   Notifications as NotificationsIcon,
@@ -93,6 +93,32 @@ const App = () => {
 
   // Ref for timer interval
   const timerIntervalRef = useRef(null);
+
+  // --- Dark mode state ---
+  const [darkMode, setDarkMode] = useState(() => {
+    const stored = localStorage.getItem('questup_dark_mode');
+    return stored ? JSON.parse(stored) : false;
+  });
+  useEffect(() => {
+    localStorage.setItem('questup_dark_mode', JSON.stringify(darkMode));
+  }, [darkMode]);
+
+  const theme = createTheme({
+    palette: {
+      mode: darkMode ? 'dark' : 'light',
+      primary: {
+        main: darkMode ? '#90caf9' : '#1976d2',
+      },
+      background: {
+        default: darkMode ? '#121212' : '#f5f6fa',
+        paper: darkMode ? '#1e1e1e' : '#fff',
+      },
+    },
+    shape: { borderRadius: 12 },
+    typography: {
+      fontFamily: 'Inter, sans-serif',
+    },
+  });
 
   // --- Local Storage Management ---
   // Function to load data from localStorage (simulating JSON files)
@@ -911,108 +937,119 @@ const App = () => {
   };
 
   return (
-    <RootBox>
-      {/* Header */}
-      <AppBar position="static" sx={{ background: 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)' }}>
-        <Toolbar sx={{ justifyContent: 'center', position: 'relative' }}>
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1, textAlign: 'center', fontWeight: 'bold' }}>
-            QuestUp
-          </Typography>
-          {/* GitHub logo button */}
-          <Box sx={{ position: 'absolute', right: 16, top: 0, height: '100%', display: 'flex', alignItems: 'center' }}>
-            <IconButton
-              color="inherit"
-              aria-label="GitHub Repository"
-              onClick={() => window.open('https://github.com/your-username/your-repo', '_blank')}
-              sx={{ p: 0.5 }}
+    <ThemeProvider theme={theme}>
+      <RootBox>
+        {/* Header */}
+        <AppBar position="static" sx={{ background: darkMode ? 'linear-gradient(45deg, #232526 30%, #414345 90%)' : 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)' }}>
+          <Toolbar sx={{ justifyContent: 'center', position: 'relative' }}>
+            <Typography variant="h5" component="div" sx={{ flexGrow: 1, textAlign: 'center', fontWeight: 'bold' }}>
+              QuestUp
+            </Typography>
+            {/* Dark mode toggle */}
+            <Box sx={{ position: 'absolute', left: 16, top: 0, height: '100%', display: 'flex', alignItems: 'center' }}>
+              <Switch
+                checked={darkMode}
+                onChange={() => setDarkMode((prev) => !prev)}
+                color="default"
+                inputProps={{ 'aria-label': 'toggle dark mode' }}
+              />
+            </Box>
+            {/* GitHub logo button */}
+            <Box sx={{ position: 'absolute', right: 16, top: 0, height: '100%', display: 'flex', alignItems: 'center' }}>
+              <IconButton
+                color="inherit"
+                aria-label="GitHub Repository"
+                onClick={() => window.open('https://github.com/Omprakash-p06/QuestUp', '_blank')}
+                sx={{ p: 0.5 }}
+              >
+                <GitHubIcon />
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+
+        {/* Main Content Area */}
+        <MainContentBox>
+          {/* Navigation Tabs */}
+          <Paper elevation={3} sx={{ borderRadius: 3, mb: 4 }}>
+            <Tabs
+              value={activeTab}
+              onChange={(event, newValue) => setActiveTab(newValue)}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="fullWidth"
+              aria-label="questup navigation tabs"
+              sx={{
+                '& .MuiTab-root': {
+                  minHeight: 64,
+                  fontSize: { xs: '0.8rem', sm: '1rem' },
+                  fontWeight: 'medium',
+                  borderRadius: 3, // Apply border-radius to tabs
+                  mx: 1, // Add horizontal margin between tabs
+                  my: 0.5, // Add vertical margin
+                  '&.Mui-selected': {
+                    backgroundColor: 'primary.main',
+                    color: 'white',
+                    boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
+                  },
+                  '&:hover': {
+                    backgroundColor: 'primary.light',
+                    color: 'white',
+                  },
+                },
+                '& .MuiTabs-indicator': {
+                  display: 'none', // Hide default indicator as selected tab has background
+                },
+              }}
             >
-              <GitHubIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
+              <Tab label="Daily Tasks" icon={<NotificationsIcon />} iconPosition="start" disabled={showTimerLockout} />
+              <Tab label="Birthdays" icon={<CakeIcon />} iconPosition="start" disabled={showTimerLockout} />
+              <Tab label="Tasks" icon={<AssignmentIcon />} iconPosition="start" disabled={showTimerLockout} />
+              <Tab label="Focus Timer" icon={<TimerIcon />} iconPosition="start" disabled={showTimerLockout} />
+            </Tabs>
+          </Paper>
 
-      {/* Main Content Area */}
-      <MainContentBox>
-        {/* Navigation Tabs */}
-        <Paper elevation={3} sx={{ borderRadius: 3, mb: 4 }}>
-          <Tabs
-            value={activeTab}
-            onChange={(event, newValue) => setActiveTab(newValue)}
-            indicatorColor="primary"
-            textColor="primary"
-            variant="fullWidth"
-            aria-label="questup navigation tabs"
-            sx={{
-              '& .MuiTab-root': {
-                minHeight: 64,
-                fontSize: { xs: '0.8rem', sm: '1rem' },
-                fontWeight: 'medium',
-                borderRadius: 3, // Apply border-radius to tabs
-                mx: 1, // Add horizontal margin between tabs
-                my: 0.5, // Add vertical margin
-                '&.Mui-selected': {
-                  backgroundColor: 'primary.main',
-                  color: 'white',
-                  boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
-                },
-                '&:hover': {
-                  backgroundColor: 'primary.light',
-                  color: 'white',
-                },
-              },
-              '& .MuiTabs-indicator': {
-                display: 'none', // Hide default indicator as selected tab has background
-              },
-            }}
-          >
-            <Tab label="Daily Tasks" icon={<NotificationsIcon />} iconPosition="start" disabled={showTimerLockout} />
-            <Tab label="Birthdays" icon={<CakeIcon />} iconPosition="start" disabled={showTimerLockout} />
-            <Tab label="Tasks" icon={<AssignmentIcon />} iconPosition="start" disabled={showTimerLockout} />
-            <Tab label="Focus Timer" icon={<TimerIcon />} iconPosition="start" disabled={showTimerLockout} />
-          </Tabs>
-        </Paper>
+          {/* Content based on active tab */}
+          <Paper elevation={3} sx={{ borderRadius: 3, flexGrow: 1 }}>
+            <TabPanel value={activeTab} index={0}>
+              <DailyTasks />
+            </TabPanel>
+            <TabPanel value={activeTab} index={1}>
+              <Birthdays />
+            </TabPanel>
+            <TabPanel value={activeTab} index={2}>
+              <GeneralTasks />
+            </TabPanel>
+            <TabPanel value={activeTab} index={3}>
+              <FocusTimer />
+            </TabPanel>
+          </Paper>
+        </MainContentBox>
 
-        {/* Content based on active tab */}
-        <Paper elevation={3} sx={{ borderRadius: 3, flexGrow: 1 }}>
-          <TabPanel value={activeTab} index={0}>
-            <DailyTasks />
-          </TabPanel>
-          <TabPanel value={activeTab} index={1}>
-            <Birthdays />
-          </TabPanel>
-          <TabPanel value={activeTab} index={2}>
-            <GeneralTasks />
-          </TabPanel>
-          <TabPanel value={activeTab} index={3}>
-            <FocusTimer />
-          </TabPanel>
-        </Paper>
-      </MainContentBox>
+        {/* Confirmation Modal */}
+        <ConfirmationModal
+          message={confirmationMessage}
+          onConfirm={handleConfirmation}
+          onCancel={confirmationCancelAction ? handleCancelConfirmation : null}
+          show={showConfirmationModal}
+        />
 
-      {/* Confirmation Modal */}
-      <ConfirmationModal
-        message={confirmationMessage}
-        onConfirm={handleConfirmation}
-        onCancel={confirmationCancelAction ? handleCancelConfirmation : null}
-        show={showConfirmationModal}
-      />
-
-      {/* Timer Lockout Overlay */}
-      <TimerLockoutOverlay
-        show={showTimerLockout}
-        remainingTime={timerRemaining}
-        onExitAttempt={() => showModal(
-          "You are currently in a focus session. Exiting now will disrupt your focus. Are you sure you want to stop?",
-          () => {
-            setIsTimerRunning(false);
-            setShowTimerLockout(false);
-            setTimerRemaining(timerDuration); // Reset timer on forced exit
-          },
-          () => closeModal() // Cancel action for this specific modal
-        )}
-      />
-    </RootBox>
+        {/* Timer Lockout Overlay */}
+        <TimerLockoutOverlay
+          show={showTimerLockout}
+          remainingTime={timerRemaining}
+          onExitAttempt={() => showModal(
+            "You are currently in a focus session. Exiting now will disrupt your focus. Are you sure you want to stop?",
+            () => {
+              setIsTimerRunning(false);
+              setShowTimerLockout(false);
+              setTimerRemaining(timerDuration); // Reset timer on forced exit
+            },
+            () => closeModal() // Cancel action for this specific modal
+          )}
+        />
+      </RootBox>
+    </ThemeProvider>
   );
 };
 

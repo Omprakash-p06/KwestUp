@@ -10,6 +10,7 @@ KwestUp is a unique to-do list application designed to help you manage your dail
 - [Building for Production](#building-for-production)
 - [Creating Desktop Executable (.exe)](#creating-desktop-executable-exe)
 - [Project Structure](#project-structure)
+- [Tools & Technologies Used](#tools-technologies-used)
 - [Troubleshooting](#troubleshooting)
 - [Future Considerations](#future-considerations)
 - [License](#license)
@@ -247,6 +248,19 @@ kwestup-app/
 ├── README.md             # This file
 └── .gitignore           # Git ignore rules
 ```
+
+## Tools & Technologies Used
+
+- **React** – Frontend UI library
+- **Material-UI (MUI)** – UI components and theming
+- **Electron** – Desktop app wrapper for cross-platform compatibility
+- **Electron Builder** – Packaging and building desktop executables
+- **@emotion/react & @emotion/styled** – CSS-in-JS styling for MUI
+- **Lucide React** – Icon library
+- **Jest & React Testing Library** – Unit and integration testing
+- **Concurrently** – Run multiple npm scripts in parallel (for dev)
+- **Wait-on** – Wait for resources (used in dev scripts)
+- **Node.js & npm** – JavaScript runtime and package management
 
 ## Troubleshooting
 

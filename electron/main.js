@@ -2,6 +2,9 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 
+// Make isFocusTimerActive accessible everywhere
+let isFocusTimerActive = false;
+
 // Optional: Install electron-is-dev for easier development setup
 // npm install electron-is-dev
 
@@ -13,6 +16,7 @@ function createWindow() {
     minWidth: 600,
     minHeight: 500,
     icon: path.join(__dirname, 'assets/icon.ico'),
+    frame: false, // Remove default OS window controls and title bar
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false, // Security: do not expose Node.js in renderer
@@ -33,9 +37,6 @@ function createWindow() {
   if (isDev) {
     win.webContents.openDevTools();
   }
-
-  // --- Focus Timer Lockout (optional, can be removed if not needed) ---
-  let isFocusTimerActive = false;
 
   // IPC listener from renderer process (React app) to main process
   ipcMain.on('set-focus-timer-active', (event, isActive) => {
@@ -80,6 +81,50 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
+  }
+});
+
+// --- Window Control IPC Handlers ---
+// Handle window control actions from the renderer process
+
+ipcMain.handle('window-control', async (event, action) => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (!win) return { success: false, error: 'No focused window' };
+
+  try {
+    switch (action) {
+      case 'close':
+        // Check if focus timer is active before closing
+        if (isFocusTimerActive) {
+          const result = await dialog.showMessageBox(win, {
+            type: 'warning',
+            title: 'Focus Mode Active',
+            message: 'You are in a focus session. Are you sure you want to close the application?',
+            buttons: ['Cancel', 'Close Anyway'],
+            defaultId: 0,
+            cancelId: 0
+          });
+          if (result.response === 0) return { success: false, cancelled: true };
+        }
+        win.close();
+        break;
+      case 'minimize':
+        win.minimize();
+        break;
+      case 'maximize':
+        if (win.isMaximized()) {
+          win.unmaximize();
+        } else {
+          win.maximize();
+        }
+        break;
+      default:
+        return { success: false, error: 'Invalid action' };
+    }
+    return { success: true };
+  } catch (error) {
+    console.error('Window control error:', error);
+    return { success: false, error: error.message };
   }
 });
 

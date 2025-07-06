@@ -71,6 +71,74 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+// Add at the top, after imports:
+const LINUX_THEMES = [
+  {
+    key: 'light',
+    name: 'Light',
+    palette: {
+      mode: 'light',
+      primary: { main: '#1976d2' },
+      background: { default: '#f5f6fa', paper: '#fff' },
+    },
+    gradient: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+  },
+  {
+    key: 'dark',
+    name: 'Dark',
+    palette: {
+      mode: 'dark',
+      primary: { main: '#90caf9' },
+      background: { default: '#121212', paper: '#1e1e1e' },
+    },
+    gradient: 'linear-gradient(135deg, #232526 0%, #414345 100%)',
+  },
+  {
+    key: 'solarized-light',
+    name: 'Solarized Light',
+    palette: {
+      mode: 'light',
+      primary: { main: '#268bd2' },
+      background: { default: '#fdf6e3', paper: '#f5f2e7' },
+      secondary: { main: '#2aa198' },
+    },
+    gradient: 'linear-gradient(135deg, #fdf6e3 0%, #e3eac2 100%)',
+  },
+  {
+    key: 'solarized-dark',
+    name: 'Solarized Dark',
+    palette: {
+      mode: 'dark',
+      primary: { main: '#268bd2' },
+      background: { default: '#002b36', paper: '#073642' },
+      secondary: { main: '#2aa198' },
+    },
+    gradient: 'linear-gradient(135deg, #002b36 0%, #073642 100%)',
+  },
+  {
+    key: 'dracula',
+    name: 'Dracula',
+    palette: {
+      mode: 'dark',
+      primary: { main: '#bd93f9' },
+      background: { default: '#282a36', paper: '#44475a' },
+      secondary: { main: '#ff79c6' },
+    },
+    gradient: 'linear-gradient(135deg, #282a36 0%, #44475a 100%)',
+  },
+  {
+    key: 'nord',
+    name: 'Nord',
+    palette: {
+      mode: 'dark',
+      primary: { main: '#88c0d0' },
+      background: { default: '#2e3440', paper: '#3b4252' },
+      secondary: { main: '#a3be8c' },
+    },
+    gradient: 'linear-gradient(135deg, #2e3440 0%, #3b4252 100%)',
+  },
+];
+
 // Main App Component
 const App = () => {
   // State for navigation (which tab is active)
@@ -94,31 +162,19 @@ const App = () => {
   // Ref for timer interval
   const timerIntervalRef = useRef(null);
 
-  // --- Dark mode state ---
-  const [darkMode, setDarkMode] = useState(() => {
-    const stored = localStorage.getItem('kwestup_dark_mode');
-    return stored ? JSON.parse(stored) : false;
-  });
-  useEffect(() => {
-    localStorage.setItem('kwestup_dark_mode', JSON.stringify(darkMode));
-  }, [darkMode]);
+  // --- Theme state ---
+  const [themeKey, setThemeKey] = useState(() => localStorage.getItem('kwestup_theme') || 'light');
 
+  const themeObj = LINUX_THEMES.find(t => t.key === themeKey) || LINUX_THEMES[0];
   const theme = createTheme({
-    palette: {
-      mode: darkMode ? 'dark' : 'light',
-      primary: {
-        main: darkMode ? '#90caf9' : '#1976d2',
-      },
-      background: {
-        default: darkMode ? '#121212' : '#f5f6fa',
-        paper: darkMode ? '#1e1e1e' : '#fff',
-      },
-    },
+    palette: themeObj.palette,
     shape: { borderRadius: 12 },
-    typography: {
-      fontFamily: 'Inter, sans-serif',
-    },
+    typography: { fontFamily: 'Inter, sans-serif' },
   });
+
+  useEffect(() => {
+    localStorage.setItem('kwestup_theme', themeKey);
+  }, [themeKey]);
 
   // --- Local Storage Management ---
   // Function to load data from localStorage (simulating JSON files)
@@ -743,14 +799,56 @@ const App = () => {
       }
     };
 
+    const timerGradient = themeObj.gradient || theme.palette.background.default;
+
     return (
-      <Box sx={{ p: { xs: 2, md: 3 }, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: 4 }}>
-        <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold', color: 'text.primary' }}>
+      <Box sx={{ 
+        p: { xs: 2, md: 3 }, 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        height: '100%', 
+        gap: 4,
+        background: timerGradient,
+        borderRadius: 3,
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Background Pattern */}
+        <Box sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%)',
+          pointerEvents: 'none'
+        }} />
+        
+        <Typography variant="h4" component="h2" sx={{ 
+          fontWeight: 'bold', 
+          color: 'white',
+          textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+          zIndex: 1,
+          textAlign: 'center'
+        }}>
           Focus Study Timer
         </Typography>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Typography variant="body1" sx={{ color: 'text.secondary' }}>Set Duration (minutes):</Typography>
+        <Box sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 2, 
+          zIndex: 1,
+          background: 'rgba(255,255,255,0.1)',
+          p: 2,
+          borderRadius: 3,
+          backdropFilter: 'blur(10px)'
+        }}>
+          <Typography variant="body1" sx={{ color: 'white', fontWeight: 'medium' }}>
+            Duration (minutes):
+          </Typography>
           <TextField
             type="number"
             inputProps={{ min: 1 }}
@@ -759,64 +857,164 @@ const App = () => {
             disabled={isTimerRunning}
             variant="outlined"
             size="small"
-            sx={{ width: 100, '& input': { textAlign: 'center', fontSize: '1.2rem' } }}
+            sx={{ 
+              width: 100, 
+              '& input': { 
+                textAlign: 'center', 
+                fontSize: '1.2rem',
+                color: 'white',
+                fontWeight: 'bold'
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'rgba(255,255,255,0.3)',
+                },
+                '&:hover fieldset': {
+                  borderColor: 'rgba(255,255,255,0.5)',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'white',
+                },
+                '& .MuiInputLabel-root': {
+                  color: 'rgba(255,255,255,0.7)',
+                },
+                '&.Mui-focused .MuiInputLabel-root': {
+                  color: 'white',
+                },
+                backgroundColor: 'rgba(255,255,255,0.1)',
+                borderRadius: 2
+              }
+            }}
           />
         </Box>
 
-        <Typography
-          variant="h1"
-          sx={{
-            fontFamily: 'monospace',
-            color: 'primary.main',
-            p: { xs: 4, md: 6 },
-            borderRadius: '50%',
-            backgroundColor: 'primary.light',
-            boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.1)',
-            border: '4px solid',
-            borderColor: 'primary.dark',
-            fontSize: { xs: '4rem', sm: '5rem', md: '6rem' }
-          }}
-        >
-          {formatTime(timerRemaining)}
-        </Typography>
+        <Box sx={{
+          position: 'relative',
+          zIndex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 2
+        }}>
+          <Typography
+            variant="h1"
+            sx={{
+              fontFamily: 'monospace',
+              color: 'white',
+              p: { xs: 4, md: 6 },
+              borderRadius: '50%',
+              background: 'rgba(255,255,255,0.15)',
+              boxShadow: '0px 0px 30px rgba(0,0,0,0.2), inset 0px 0px 20px rgba(255,255,255,0.1)',
+              border: '3px solid rgba(255,255,255,0.3)',
+              fontSize: { xs: '3.5rem', sm: '4.5rem', md: '5.5rem' },
+              fontWeight: 'bold',
+              textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+              backdropFilter: 'blur(10px)',
+              transition: 'all 0.3s ease-in-out',
+              '&:hover': {
+                transform: 'scale(1.02)',
+                boxShadow: '0px 0px 40px rgba(0,0,0,0.3), inset 0px 0px 25px rgba(255,255,255,0.15)',
+              }
+            }}
+          >
+            {formatTime(timerRemaining)}
+          </Typography>
+          
+          <Typography variant="h6" sx={{ 
+            color: 'white', 
+            textAlign: 'center',
+            textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+            fontWeight: 'medium'
+          }}>
+            {isTimerRunning ? 'Focus Mode Active' : 'Ready to Focus'}
+          </Typography>
+        </Box>
 
-        <Box sx={{ display: 'flex', gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2, zIndex: 1 }}>
           {!isTimerRunning ? (
             <Button
               variant="contained"
-              color="success"
               onClick={startTimer}
               startIcon={<PlayArrowIcon />}
               disabled={timerRemaining === 0}
-              sx={{ p: 2, borderRadius: 3, fontSize: '1.2rem' }}
+              sx={{ 
+                p: 2, 
+                borderRadius: 3, 
+                fontSize: '1.2rem',
+                background: 'linear-gradient(45deg, #4CAF50 30%, #66BB6A 90%)',
+                boxShadow: '0 4px 15px rgba(76, 175, 80, 0.4)',
+                '&:hover': {
+                  background: 'linear-gradient(45deg, #43A047 30%, #4CAF50 90%)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 6px 20px rgba(76, 175, 80, 0.6)',
+                },
+                transition: 'all 0.3s ease-in-out'
+              }}
             >
-              Start
+              Start Focus
             </Button>
           ) : (
             <Button
               variant="contained"
-              color="warning"
               onClick={pauseTimer}
               startIcon={<PauseIcon />}
-              sx={{ p: 2, borderRadius: 3, fontSize: '1.2rem' }}
+              sx={{ 
+                p: 2, 
+                borderRadius: 3, 
+                fontSize: '1.2rem',
+                background: 'linear-gradient(45deg, #FF9800 30%, #FFB74D 90%)',
+                boxShadow: '0 4px 15px rgba(255, 152, 0, 0.4)',
+                '&:hover': {
+                  background: 'linear-gradient(45deg, #F57C00 30%, #FF9800 90%)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 6px 20px rgba(255, 152, 0, 0.6)',
+                },
+                transition: 'all 0.3s ease-in-out'
+              }}
             >
               Pause
             </Button>
           )}
           <Button
             variant="contained"
-            color="error"
             onClick={resetTimer}
             startIcon={<RefreshIcon />}
-            sx={{ p: 2, borderRadius: 3, fontSize: '1.2rem' }}
+            sx={{ 
+              p: 2, 
+              borderRadius: 3, 
+              fontSize: '1.2rem',
+              background: 'linear-gradient(45deg, #F44336 30%, #EF5350 90%)',
+              boxShadow: '0 4px 15px rgba(244, 67, 54, 0.4)',
+              '&:hover': {
+                background: 'linear-gradient(45deg, #D32F2F 30%, #F44336 90%)',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 6px 20px rgba(244, 67, 54, 0.6)',
+              },
+              transition: 'all 0.3s ease-in-out'
+            }}
           >
             Reset
           </Button>
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
-          <InfoOutlinedIcon fontSize="small" color="action" />
-          <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-            In a native app, this feature would truly prevent exiting until the timer is up. Here, a full-screen overlay is used.
+        
+        <Box sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 1, 
+          mt: 2, 
+          zIndex: 1,
+          background: 'rgba(255,255,255,0.1)',
+          p: 1.5,
+          borderRadius: 2,
+          backdropFilter: 'blur(10px)'
+        }}>
+          <InfoOutlinedIcon fontSize="small" sx={{ color: 'rgba(255,255,255,0.8)' }} />
+          <Typography variant="caption" sx={{ 
+            color: 'rgba(255,255,255,0.8)', 
+            fontStyle: 'italic',
+            textAlign: 'center'
+          }}>
+            Focus mode prevents exiting until timer completes
           </Typography>
         </Box>
       </Box>
@@ -862,74 +1060,136 @@ const App = () => {
 
   // Timer Lockout Overlay Component
   const TimerLockoutOverlay = ({ show, remainingTime, onExitAttempt }) => {
+    const timerGradient = themeObj.gradient || theme.palette.background.default;
+
     return (
       <Backdrop
         sx={{
           color: '#fff',
           zIndex: (theme) => theme.zIndex.drawer + 1,
-          background: 'linear-gradient(45deg, #1976d2 30%, #42a5f5 90%)', // Blue gradient
+          background: timerGradient,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           p: 4,
           textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden'
         }}
         open={show}
       >
-        <Box sx={{ p: 4, borderRadius: 4, bgcolor: 'rgba(255,255,255,0.1)', boxShadow: '0px 0px 30px rgba(0,0,0,0.3)' }}>
-          <Typography variant="h3" component="h1" sx={{ fontWeight: 'extrabold', mb: 3, animation: 'pulse 1.5s infinite' }}>
-            Focus Mode Active!
+        {/* Background Pattern */}
+        <Box sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%)',
+          pointerEvents: 'none'
+        }} />
+        
+        <Box sx={{ 
+          p: 4, 
+          borderRadius: 4, 
+          background: 'rgba(255,255,255,0.1)', 
+          boxShadow: '0px 0px 30px rgba(0,0,0,0.3)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255,255,255,0.2)',
+          maxWidth: '90vw',
+          width: 'auto',
+          zIndex: 1
+        }}>
+          <Typography variant="h3" component="h1" sx={{ 
+            fontWeight: 'bold', 
+            mb: 3, 
+            color: 'white',
+            textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+            animation: 'pulse 2s infinite ease-in-out'
+          }}>
+            🎯 Focus Mode Active!
           </Typography>
-          <Typography variant="h5" sx={{ mb: 4, fontWeight: 'light' }}>
+          
+          <Typography variant="h6" sx={{ 
+            mb: 4, 
+            fontWeight: 'medium',
+            color: 'rgba(255,255,255,0.9)',
+            textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+          }}>
             Stay focused. You cannot exit until the timer is complete.
           </Typography>
-          <Typography
-            variant="h1"
-            sx={{
-              fontFamily: 'monospace',
-              mt: 4,
-              p: { xs: 4, md: 6 },
-              borderRadius: '50%',
-              backgroundColor: 'rgba(255,255,255,0.15)',
-              boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.2)',
-              border: '4px solid',
-              borderColor: 'rgba(255,255,255,0.4)',
-              fontSize: { xs: '4rem', sm: '5rem', md: '6rem' }
-            }}
-          >
-            {formatTime(remainingTime)}
-          </Typography>
-          <Typography variant="h6" sx={{ mt: 4 }}>
-            Keep going, you're doing great!
-          </Typography>
+          
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 2,
+            my: 4
+          }}>
+            <Typography
+              variant="h1"
+              sx={{
+                fontFamily: 'monospace',
+                p: { xs: 4, md: 6 },
+                borderRadius: '50%',
+                background: 'rgba(255,255,255,0.15)',
+                boxShadow: '0px 0px 30px rgba(0,0,0,0.2), inset 0px 0px 20px rgba(255,255,255,0.1)',
+                border: '3px solid rgba(255,255,255,0.3)',
+                fontSize: { xs: '3.5rem', sm: '4.5rem', md: '5.5rem' },
+                fontWeight: 'bold',
+                textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                backdropFilter: 'blur(10px)',
+                color: 'white',
+                animation: 'glow 2s ease-in-out infinite alternate'
+              }}
+            >
+              {formatTime(remainingTime)}
+            </Typography>
+            
+            <Typography variant="h5" sx={{ 
+              mt: 2,
+              color: 'white',
+              textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+              fontWeight: 'medium'
+            }}>
+              ⭐ Keep going, you're doing great! ⭐
+            </Typography>
+          </Box>
+          
           <Button
             variant="contained"
-            color="error"
             onClick={onExitAttempt}
             startIcon={<CloseIcon />}
             sx={{
-              mt: 6,
+              mt: 4,
               px: 4,
               py: 2,
               borderRadius: 4,
               fontSize: '1.2rem',
-              boxShadow: '0px 4px 15px rgba(0,0,0,0.3)',
+              background: 'linear-gradient(45deg, #F44336 30%, #EF5350 90%)',
+              boxShadow: '0px 4px 15px rgba(244, 67, 54, 0.4)',
               '&:hover': {
-                transform: 'scale(1.05)',
-                boxShadow: '0px 6px 20px rgba(0,0,0,0.4)',
+                background: 'linear-gradient(45deg, #D32F2F 30%, #F44336 90%)',
+                transform: 'translateY(-2px)',
+                boxShadow: '0px 6px 20px rgba(244, 67, 54, 0.6)',
               },
               transition: 'all 0.3s ease-in-out',
             }}
           >
-            Attempt Exit (Warning)
+            ⚠️ Attempt Exit (Warning)
           </Button>
         </Box>
+        
         <style>{`
           @keyframes pulse {
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.05); opacity: 0.9; }
             100% { transform: scale(1); opacity: 1; }
+          }
+          @keyframes glow {
+            from { box-shadow: 0px 0px 30px rgba(0,0,0,0.2), inset 0px 0px 20px rgba(255,255,255,0.1); }
+            to { box-shadow: 0px 0px 40px rgba(255,255,255,0.3), inset 0px 0px 25px rgba(255,255,255,0.2); }
           }
         `}</style>
       </Backdrop>
@@ -939,23 +1199,96 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <RootBox>
+        {/* Linux-style window bar above AppBar - Only show in Electron */}
+        {window.electronAPI?.isElectron && (
+          <Box sx={{
+            width: '100%',
+            height: 32,
+            display: 'flex',
+            alignItems: 'center',
+            background: theme.palette.mode === 'dark' ? '#232526' : '#e0e0e0',
+            borderTopLeftRadius: 12,
+            borderTopRightRadius: 12,
+            borderBottom: '1px solid #ccc',
+            pl: 2,
+            userSelect: 'none',
+          }}>
+          {/* Linux window controls */}
+          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+            <Box 
+              sx={{ 
+                width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                bgcolor: '#ff5f56', borderRadius: '50%', border: '1.5px solid #e0443e', mr: 0.5,
+                cursor: 'pointer', transition: 'all 0.2s ease',
+                '&:hover': { bgcolor: '#ff4444', transform: 'scale(1.1)' }
+              }}
+              onClick={() => { if (window.electronAPI?.isElectron) window.electronAPI.windowControl('close'); }}
+              title="Close"
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" style={{ display: 'block' }}>
+                <line x1="2" y1="2" x2="10" y2="10" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+                <line x1="10" y1="2" x2="2" y2="10" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </Box>
+            <Box 
+              sx={{ 
+                width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                bgcolor: '#ffbd2e', borderRadius: '50%', border: '1.5px solid #dea123', mr: 0.5,
+                cursor: 'pointer', transition: 'all 0.2s ease',
+                '&:hover': { bgcolor: '#ffaa00', transform: 'scale(1.1)' }
+              }}
+              onClick={() => { if (window.electronAPI?.isElectron) window.electronAPI.windowControl('minimize'); }}
+              title="Minimize"
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" style={{ display: 'block' }}>
+                <line x1="2" y1="6" x2="10" y2="6" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </Box>
+            <Box 
+              sx={{ 
+                width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                bgcolor: '#27c93f', borderRadius: '50%', border: '1.5px solid #13a10e',
+                cursor: 'pointer', transition: 'all 0.2s ease',
+                '&:hover': { bgcolor: '#22aa33', transform: 'scale(1.1)' }
+              }}
+              onClick={() => { if (window.electronAPI?.isElectron) window.electronAPI.windowControl('maximize'); }}
+              title="Maximize"
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" style={{ display: 'block' }}>
+                <rect x="2.5" y="2.5" width="7" height="7" rx="1.5" fill="none" stroke="#fff" strokeWidth="2" />
+              </svg>
+            </Box>
+          </Box>
+        </Box>
+        )}
+
         {/* Header */}
-        <AppBar position="static" sx={{ background: darkMode ? 'linear-gradient(45deg, #232526 30%, #414345 90%)' : 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)' }}>
-          <Toolbar sx={{ justifyContent: 'center', position: 'relative' }}>
+        <AppBar position="static" sx={{ background: theme.palette.mode === 'dark' ? 'linear-gradient(45deg, #232526 30%, #414345 90%)' : 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)', boxShadow: 'none', borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
+          <Toolbar sx={{ justifyContent: 'center', position: 'relative', minHeight: 56 }}>
             <Typography variant="h5" component="div" sx={{ flexGrow: 1, textAlign: 'center', fontWeight: 'bold' }}>
               KwestUp
             </Typography>
-            {/* Dark mode toggle */}
-            <Box sx={{ position: 'absolute', left: 16, top: 0, height: '100%', display: 'flex', alignItems: 'center' }}>
-              <Switch
-                checked={darkMode}
-                onChange={() => setDarkMode((prev) => !prev)}
-                color="default"
-                inputProps={{ 'aria-label': 'toggle dark mode' }}
-              />
-            </Box>
-            {/* GitHub logo button */}
-            <Box sx={{ position: 'absolute', right: 16, top: 0, height: '100%', display: 'flex', alignItems: 'center' }}>
+            {/* Theme selector */}
+            <Box sx={{ position: 'absolute', right: 16, top: 0, height: '100%', display: 'flex', alignItems: 'center', gap: 2 }}>
+              <select
+                value={themeKey}
+                onChange={e => setThemeKey(e.target.value)}
+                style={{
+                  background: theme.palette.background.paper,
+                  color: theme.palette.text.primary,
+                  border: '1px solid #ccc',
+                  borderRadius: 6,
+                  padding: '4px 12px',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  marginRight: 8,
+                }}
+                aria-label="Theme selector"
+              >
+                {LINUX_THEMES.map(t => (
+                  <option key={t.key} value={t.key}>{t.name}</option>
+                ))}
+              </select>
               <IconButton
                 color="inherit"
                 aria-label="GitHub Repository"

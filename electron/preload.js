@@ -8,4 +8,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   setFocusTimerActive: (isActive) => ipcRenderer.send('set-focus-timer-active', isActive),
   saveData: (filename, data) => ipcRenderer.invoke('save-data-to-json', filename, data),
   loadData: (filename) => ipcRenderer.invoke('load-data-from-json', filename),
+  // Window control functions
+  windowControl: (action) => ipcRenderer.invoke('window-control', action),
+  // Check if running in Electron
+  isElectron: true,
 });

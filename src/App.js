@@ -96,11 +96,11 @@ const App = () => {
 
   // --- Dark mode state ---
   const [darkMode, setDarkMode] = useState(() => {
-    const stored = localStorage.getItem('questup_dark_mode');
+    const stored = localStorage.getItem('kwestup_dark_mode');
     return stored ? JSON.parse(stored) : false;
   });
   useEffect(() => {
-    localStorage.setItem('questup_dark_mode', JSON.stringify(darkMode));
+    localStorage.setItem('kwestup_dark_mode', JSON.stringify(darkMode));
   }, [darkMode]);
 
   const theme = createTheme({
@@ -124,7 +124,7 @@ const App = () => {
   // Function to load data from localStorage (simulating JSON files)
   const loadData = useCallback(() => {
     try {
-      const storedData = localStorage.getItem('questup_data');
+      const storedData = localStorage.getItem('kwestup_data');
       if (storedData) {
         const parsedData = JSON.parse(storedData);
         setDailyTasks(parsedData.dailyTasks || []);
@@ -171,7 +171,7 @@ const App = () => {
         startTime: isTimerRunning ? Date.now() - (timerDuration - timerRemaining) * 1000 : null, // Calculate start time
       },
     };
-    localStorage.setItem('questup_data', JSON.stringify(dataToSave));
+          localStorage.setItem('kwestup_data', JSON.stringify(dataToSave));
   }, [dailyTasks, birthdays, tasks, timerDuration, timerRemaining, isTimerRunning]);
 
   // Load data on initial component mount
@@ -462,7 +462,7 @@ const App = () => {
     const todayMonthDay = new Date().toISOString().slice(5, 10); // MM-DD
 
     useEffect(() => {
-        const hasNotified = localStorage.getItem(`questup_birthday_notified_${todayMonthDay}`);
+        const hasNotified = localStorage.getItem(`kwestup_birthday_notified_${todayMonthDay}`);
         if (!hasNotified) {
             const todayBirthdays = birthdays.filter(b => b.date === todayMonthDay);
             if (todayBirthdays.length > 0) {
@@ -470,7 +470,7 @@ const App = () => {
                 showModal(
                     `Happy Birthday to: ${names}! 🎉`,
                     () => {
-                        localStorage.setItem(`questup_birthday_notified_${todayMonthDay}`, 'true');
+                        localStorage.setItem(`kwestup_birthday_notified_${todayMonthDay}`, 'true');
                         setShowConfirmationModal(false);
                     }
                 );
@@ -943,7 +943,7 @@ const App = () => {
         <AppBar position="static" sx={{ background: darkMode ? 'linear-gradient(45deg, #232526 30%, #414345 90%)' : 'linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)' }}>
           <Toolbar sx={{ justifyContent: 'center', position: 'relative' }}>
             <Typography variant="h5" component="div" sx={{ flexGrow: 1, textAlign: 'center', fontWeight: 'bold' }}>
-              QuestUp
+              KwestUp
             </Typography>
             {/* Dark mode toggle */}
             <Box sx={{ position: 'absolute', left: 16, top: 0, height: '100%', display: 'flex', alignItems: 'center' }}>
@@ -959,7 +959,7 @@ const App = () => {
               <IconButton
                 color="inherit"
                 aria-label="GitHub Repository"
-                onClick={() => window.open('https://github.com/Omprakash-p06/QuestUp', '_blank')}
+                onClick={() => window.open('https://github.com/Omprakash-p06/KwestUp', '_blank')}
                 sx={{ p: 0.5 }}
               >
                 <GitHubIcon />
@@ -978,7 +978,7 @@ const App = () => {
               indicatorColor="primary"
               textColor="primary"
               variant="fullWidth"
-              aria-label="questup navigation tabs"
+              aria-label="kwestup navigation tabs"
               sx={{
                 '& .MuiTab-root': {
                   minHeight: 64,

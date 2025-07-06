@@ -2,7 +2,7 @@
 setlocal
 
 :: ========================================
-:: QuestUp Installation Script
+:: KwestUp Installation Script
 :: ========================================
 echo.
 echo Checking for required dependencies...

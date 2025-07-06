@@ -1,4 +1,4 @@
-# QuestUp - Quick Start Guide
+# KwestUp - Quick Start Guide
 
 ## 🚀 Get Started in 3 Steps
 
@@ -8,7 +8,7 @@
 3. Run the installer
 4. **Important**: Check "Add to PATH" during installation
 
-### Step 2: Install QuestUp
+### Step 2: Install KwestUp
 **Option A: Using the installer script (Windows)**
 ```bash
 # Double-click install.bat
@@ -19,7 +19,7 @@ install.bat
 **Option B: Manual installation**
 ```bash
 # Navigate to project folder
-cd questup-app
+cd kwestup-app
 
 # Install dependencies
 npm install

@@ -1,7 +1,7 @@
 {
-  "name": "questup-app",
+  "name": "kwestup-app",
   "version": "0.1.0",
-  "description": "QuestUp - Task, Birthday, and Focus Timer App (React + Electron)",
+  "description": "KwestUp - Task, Birthday, and Focus Timer App (React + Electron)",
   "author": "Your Name <your.email@example.com>",
   "private": true,
   "main": "electron/main.js",
@@ -42,8 +42,8 @@
     "postbuild": "node scripts/copy-package.js"
   },
   "build": {
-    "appId": "com.questup.app",
-    "productName": "QuestUp",
+    "appId": "com.kwestup.app",
+    "productName": "KwestUp",
     "directories": {
       "output": "dist"
     },

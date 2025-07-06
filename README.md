@@ -1,6 +1,6 @@
-# QuestUp - Your Ultimate Task Manager and Focus Companion
+# KwestUp - Your Ultimate Task Manager and Focus Companion
 
-QuestUp is a unique to-do list application designed to help you manage your daily tasks, remember important birthdays, track personal goals, and maintain focus with a dedicated study timer. This project is built using React with Material-UI for a modern and intuitive user experience.
+KwestUp is a unique to-do list application designed to help you manage your daily tasks, remember important birthdays, track personal goals, and maintain focus with a dedicated study timer. This project is built using React with Material-UI for a modern and intuitive user experience.
 
 ## Table of Contents
 - [Features](#features)
@@ -63,7 +63,7 @@ You should see version numbers for both (e.g., v18.17.0 and 9.6.7).
 **Option A: Using Git (Recommended)**
 ```bash
 git clone <repository-url>
-cd questup-app
+cd kwestup-app
 ```
 
 **Option B: Download ZIP**
@@ -77,7 +77,7 @@ Navigate to the project directory and install all required dependencies:
 
 ```bash
 # Navigate to project directory
-cd questup-app
+cd kwestup-app
 
 # Install dependencies
 npm install
@@ -178,7 +178,7 @@ npm run dist-win
 #### Step 1: Prepare the Project
 ```bash
 # Ensure you're in the project directory
-cd questup-app
+cd kwestup-app
 
 # Install all dependencies (if not already done)
 npm install
@@ -204,33 +204,33 @@ This command will:
 
 #### Step 4: Find Your .exe File
 After the build completes successfully, you'll find:
-- **Installer**: `dist/QuestUp Setup.exe` (recommended for distribution)
-- **Portable**: `dist/win-unpacked/QuestUp.exe` (can be run without installation)
+- **Installer**: `dist/KwestUp Setup.exe` (recommended for distribution)
+- **Portable**: `dist/win-unpacked/KwestUp.exe` (can be run without installation)
 
 ### Build Output
 
 The build process creates several files in the `dist` folder:
-- `QuestUp Setup.exe` - Windows installer (recommended)
+- `KwestUp Setup.exe` - Windows installer (recommended)
 - `win-unpacked/` - Folder containing the portable version
 - `builder-debug.yml` - Build configuration log
 
 ### Installing the Application
 
 1. **Using Installer (Recommended)**:
-   - Double-click `QuestUp Setup.exe`
+   - Double-click `KwestUp Setup.exe`
    - Follow the installation wizard
    - Choose installation directory
    - The app will be available in Start Menu and Desktop
 
 2. **Portable Version**:
    - Navigate to `dist/win-unpacked/`
-   - Double-click `QuestUp.exe`
+   - Double-click `KwestUp.exe`
    - No installation required
 
 ## Project Structure
 
 ```
-questup-app/
+kwestup-app/
 ├── public/                 # Static files
 │   ├── index.html         # Main HTML file
 │   └── favicon.ico        # App icon
@@ -329,4 +329,4 @@ If you encounter any issues or have questions:
 
 ---
 
-**Happy Task Managing with QuestUp! 🚀**
+**Happy Task Managing with KwestUp! 🚀**

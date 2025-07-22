@@ -15,7 +15,8 @@ function createWindow() {
     height: 800,
     minWidth: 600,
     minHeight: 500,
-    icon: path.join(__dirname, 'assets/icon.ico'),
+    // Use playstore.png as the app icon (convert to .ico for best compatibility)
+    icon: path.join(__dirname, '../public/playstore.png'),
     frame: false, // Remove default OS window controls and title bar
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

@@ -3,3 +3,256 @@
 }
 
 /* Removed unused React logo CSS classes */
+
+/* Themed react-calendar styles */
+.react-calendar {
+  width: 100% !important;
+  max-width: 100% !important;
+  background: var(--calendar-bg, #fff);
+  color: var(--calendar-text, #222);
+  border-radius: 18px;
+  border: none;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  font-family: 'Inter', 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  padding: 0.5rem 0.5rem 1.5rem 0.5rem;
+}
+.react-calendar--doubleView {
+  width: 100% !important;
+}
+.react-calendar__navigation {
+  display: flex;
+  height: 48px;
+  margin-bottom: 1rem;
+  background: transparent;
+}
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  color: var(--calendar-accent, #1976d2);
+  font-size: 1.3rem;
+  border-radius: 8px;
+  border: none;
+  transition: background 0.2s;
+}
+.react-calendar__navigation button:enabled:hover {
+  background: var(--calendar-hover, #f0f0f0);
+}
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--calendar-accent, #1976d2);
+  background: none;
+}
+.react-calendar__tile {
+  background: none;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+  color: var(--calendar-text, #222);
+  font-weight: 500;
+  padding: 0.7em 0.2em;
+}
+.react-calendar__tile--active,
+.react-calendar__tile--now {
+  background: var(--calendar-accent, #1976d2);
+  color: #fff !important;
+  box-shadow: 0 0 8px var(--calendar-accent, #1976d2);
+}
+.react-calendar__tile:enabled:hover {
+  background: var(--calendar-hover, #f0f0f0);
+}
+.react-calendar__tile--hasActive {
+  background: var(--calendar-accent, #1976d2);
+  color: #fff;
+}
+.react-calendar__tile--rangeStart,
+.react-calendar__tile--rangeEnd {
+  background: var(--calendar-accent, #1976d2);
+  color: #fff;
+}
+
+/* AMOLED theme */
+body[data-theme='amoled-dark'] .react-calendar {
+  --calendar-bg: #000;
+  --calendar-text: #fff;
+  --calendar-accent: #fff700;
+  --calendar-hover: #181A20;
+  box-shadow: 0 0 16px 0 #fff70055, 0 0 4px 0 #fff;
+}
+body[data-theme='amoled-dark'] .react-calendar__tile--active,
+body[data-theme='amoled-dark'] .react-calendar__tile--now {
+  background: #fff700;
+  color: #000 !important;
+  box-shadow: 0 0 8px #fff700;
+}
+body[data-theme='amoled-dark'] .react-calendar__navigation button {
+  color: #fff700;
+}
+body[data-theme='amoled-dark'] .react-calendar__month-view__weekdays {
+  color: #fff700;
+}
+
+/* AMOLED: Make all backgrounds pure black and text white */
+body[data-theme='amoled-dark'] {
+  background: #000 !important;
+}
+body[data-theme='amoled-dark'] #root {
+  background: #000 !important;
+}
+body[data-theme='amoled-dark'] .MuiPaper-root,
+body[data-theme='amoled-dark'] .MuiBox-root,
+body[data-theme='amoled-dark'] .MuiAppBar-root,
+body[data-theme='amoled-dark'] .MuiToolbar-root,
+body[data-theme='amoled-dark'] .MuiDialog-paper,
+body[data-theme='amoled-dark'] .MuiDialogContent-root,
+body[data-theme='amoled-dark'] .MuiDialogTitle-root,
+body[data-theme='amoled-dark'] .MuiButton-root,
+body[data-theme='amoled-dark'] .MuiInputBase-root,
+body[data-theme='amoled-dark'] .MuiOutlinedInput-root,
+body[data-theme='amoled-dark'] .MuiSelect-root,
+body[data-theme='amoled-dark'] .MuiMenu-paper,
+body[data-theme='amoled-dark'] .MuiPopover-paper {
+  background-color: #000 !important;
+  color: #fff !important;
+  border-color: #fff700 !important;
+}
+body[data-theme='amoled-dark'] .MuiTypography-root,
+body[data-theme='amoled-dark'] .MuiButton-label,
+body[data-theme='amoled-dark'] .MuiInputBase-input,
+body[data-theme='amoled-dark'] .MuiOutlinedInput-input,
+body[data-theme='amoled-dark'] .MuiSelect-select {
+  color: #fff !important;
+}
+body[data-theme='amoled-dark'] .MuiPaper-root,
+body[data-theme='amoled-dark'] .MuiBox-root,
+body[data-theme='amoled-dark'] .MuiAppBar-root,
+body[data-theme='amoled-dark'] .MuiToolbar-root {
+  box-shadow: 0 0 16px 0 #fff70055, 0 0 4px 0 #fff;
+  border: 1.5px solid #fff700;
+}
+body[data-theme='amoled-dark'] .MuiButton-containedPrimary {
+  background-color: #fff700 !important;
+  color: #000 !important;
+  box-shadow: 0 0 8px #fff700;
+}
+body[data-theme='amoled-dark'] .MuiButton-outlinedPrimary {
+  border-color: #fff700 !important;
+  color: #fff700 !important;
+}
+body[data-theme='amoled-dark'] .MuiInput-underline:before,
+body[data-theme='amoled-dark'] .MuiInput-underline:after,
+body[data-theme='amoled-dark'] .MuiOutlinedInput-notchedOutline {
+  border-color: #fff700 !important;
+}
+body[data-theme='amoled-dark'] .MuiLinearProgress-root {
+  background-color: #222 !important;
+}
+body[data-theme='amoled-dark'] .MuiLinearProgress-barColorPrimary {
+  background-color: #fff700 !important;
+}
+body[data-theme='amoled-dark'] .MuiCheckbox-root {
+  color: #fff700 !important;
+}
+body[data-theme='amoled-dark'] .MuiIconButton-root {
+  color: #fff !important;
+}
+body[data-theme='amoled-dark'] .MuiSvgIcon-root {
+  color: #fff !important;
+}
+body[data-theme='amoled-dark'] .MuiInputLabel-root {
+  color: #fff !important;
+}
+body[data-theme='amoled-dark'] .MuiSelect-icon {
+  color: #fff700 !important;
+}
+body[data-theme='amoled-dark'] .MuiDialogTitle-root {
+  color: #fff !important;
+}
+body[data-theme='amoled-dark'] .MuiDialogContent-root {
+  color: #fff !important;
+}
+body[data-theme='amoled-dark'] .MuiDialogActions-root {
+  color: #fff !important;
+}
+body[data-theme='amoled-dark'] .MuiTab-root {
+  color: #fff !important;
+}
+body[data-theme='amoled-dark'] .MuiTab-root.Mui-selected {
+  color: #fff700 !important;
+}
+body[data-theme='amoled-dark'] .MuiTabs-indicator {
+  background-color: #fff700 !important;
+}
+body[data-theme='amoled-dark'] .MuiDivider-root {
+  border-color: #fff700 !important;
+}
+body[data-theme='amoled-dark'] .MuiChip-root {
+  background-color: #222 !important;
+  color: #fff !important;
+  border-color: #fff700 !important;
+}
+body[data-theme='amoled-dark'] .MuiAvatar-root {
+  background-color: #222 !important;
+  color: #fff !important;
+  border: 1.5px solid #fff700 !important;
+}
+
+/* Dark theme */
+body[data-theme='dark'] .react-calendar {
+  --calendar-bg: #181A20;
+  --calendar-text: #fff;
+  --calendar-accent: #90caf9;
+  --calendar-hover: #23242B;
+}
+body[data-theme='dark'] .react-calendar__tile--active,
+body[data-theme='dark'] .react-calendar__tile--now {
+  background: #90caf9;
+  color: #181A20 !important;
+  box-shadow: 0 0 8px #90caf9;
+}
+body[data-theme='dark'] .react-calendar__navigation button {
+  color: #90caf9;
+}
+body[data-theme='dark'] .react-calendar__month-view__weekdays {
+  color: #90caf9;
+}
+
+/* Light theme */
+body[data-theme='light'] .react-calendar {
+  --calendar-bg: #fff;
+  --calendar-text: #181A20;
+  --calendar-accent: #1976d2;
+  --calendar-hover: #f0f0f0;
+}
+body[data-theme='light'] .react-calendar__tile--active,
+body[data-theme='light'] .react-calendar__tile--now {
+  background: #1976d2;
+  color: #fff !important;
+  box-shadow: 0 0 8px #1976d2;
+}
+body[data-theme='light'] .react-calendar__navigation button {
+  color: #1976d2;
+}
+body[data-theme='light'] .react-calendar__month-view__weekdays {
+  color: #1976d2;
+}
+
+/* Center sidebar icons vertically */
+.sidebar-centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 2rem;
+}
+
+/* Center top bar title absolutely */
+.topbar-title-centered {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  text-align: center;
+}
